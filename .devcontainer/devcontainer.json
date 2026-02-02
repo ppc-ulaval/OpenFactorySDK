@@ -1,29 +1,29 @@
 {
-  "name": "OpenFactory-SDK Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/python:3.13",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/openfactoryio/openfactory-sdk/infra": {
-      "openfactory-version": "main"
-    }
+    "name": "OpenFactory-SDK Dev Container",
+    "image": "mcr.microsoft.com/devcontainers/python:3.13",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "moby": false
+        },
+        "ghcr.io/openfactoryio/openfactory-sdk/infra": {
+            "openfactory-version": "main"
+        }
     },
-  "customizations": {
-    "vscode": {
-      "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-      },
-      "extensions": [
-        "ms-python.python",
-        "ms-azuretools.vscode-docker"
-      ]
-    }
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash"
+            },
+            "extensions": ["ms-python.python", "ms-azuretools.vscode-docker"]
+        }
     },
+    "postCreateCommand": "sudo bash -c 'wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq'",
     "containerEnv": {
-    "ENVIRONMENT": "local",
-    "DEPLOYMENT_PLATFORM": "docker",
-    "OPENFACTORY_UNS_SCHEMA": "/workspaces/OpenFactorySDK/openfactory/uns.yml",
-    "ROUTING_LAYER_IMAGE": "ofa/routing-layer",
-    "FASTAPI_GROUP_IMAGE": "ofa/stream-api-non-replicated",
-    "STATE_API_IMAGE": "ofa/state-api"
-  }
+        "ENVIRONMENT": "local",
+        "DEPLOYMENT_PLATFORM": "docker",
+        "OPENFACTORY_UNS_SCHEMA": "/workspaces/OpenFactorySDK/openfactory/uns.yml",
+        "ROUTING_LAYER_IMAGE": "ofa/routing-layer",
+        "FASTAPI_GROUP_IMAGE": "ofa/stream-api-non-replicated",
+        "STATE_API_IMAGE": "ofa/state-api"
+    }
 }
