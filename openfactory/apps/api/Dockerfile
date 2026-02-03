@@ -43,4 +43,6 @@ RUN chown -R appuser:appuser /ofa
 USER ${UNAME}
 
 EXPOSE 8000
+HEALTHCHECK --interval=5s --timeout=3s --start-period=10s --retries=30 \
+    CMD python3 -c "import socket; s=socket.create_connection(('127.0.0.1', 8000), 2); s.close()"
 CMD ["python3", "-u", "/ofa/app.py"]
