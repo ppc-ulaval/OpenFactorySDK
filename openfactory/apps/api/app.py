@@ -1,4 +1,5 @@
 import asyncio
+import os
 import threading
 import time
 import websockets
@@ -11,7 +12,6 @@ from services.device_service import DeviceService
 from services.stream_service import StreamService
 from connection.connection_manager import ConnectionManager
 from connection.websockets_manager import WebsocketsManager
-from topic_subscription import TopicSubscriber
 
 class OpenFactoryAPI(OpenFactoryApp):
     """Main application class that orchestrates all components"""
@@ -127,8 +127,8 @@ def main():
     api = OpenFactoryAPI(
         app_uuid='OFA-API',
         config=config,
-        ksqlClient=KSQLDBClient(config.ksqldb_url),
-        bootstrap_servers=config.kafka_brokers
+        ksqlClient=KSQLDBClient(os.getenv('KSQLDB_URL', 'http://ksqldb-server:8088')),
+        bootstrap_servers=os.getenv('KAFKA_BROKER', 'broker:29092')
     )
     
     try:

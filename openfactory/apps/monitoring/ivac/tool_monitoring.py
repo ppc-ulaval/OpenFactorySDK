@@ -35,8 +35,9 @@ class ToolMonitoring(OpenFactoryApp):
         self.tool_states = {}
         object.__setattr__(self, 'ASSET_ID', 'IVAC')
 
-        self.add_attribute('ivac_system', AssetAttribute(
-            self.IVAC_SYSTEM_UUID,
+        self.add_attribute(AssetAttribute(
+            id='ivac_system',
+            value=self.IVAC_SYSTEM_UUID,
             type='Events',
             tag='DeviceUuid'))
 
@@ -44,10 +45,11 @@ class ToolMonitoring(OpenFactoryApp):
                           ksqlClient=ksqlClient,
                           bootstrap_servers=bootstrap_servers)
 
-        self.ivac.add_attribute('ivac_tools_status',
-                                AssetAttribute('UNAVAILABLE',
-                                               type='Condition',
-                                               tag='UNAVAILABLE'))
+        self.ivac.add_attribute(AssetAttribute(
+                                    id='ivac_tools_status',
+                                    value='UNAVAILABLE',
+                                    type='Condition',
+                                    tag='UNAVAILABLE'))
 
         self.tool_states['A2ToolPlus'] = self.ivac.A2ToolPlus.value
         self.tool_states['A3ToolPlus'] = self.ivac.A3ToolPlus.value
@@ -64,7 +66,7 @@ class ToolMonitoring(OpenFactoryApp):
         # Initialize buzzer state
         self.verify_tool_states()
 
-        self.ivac.subscribe_to_events(self.on_event, 'ivac_events_group')
+        self.ivac.subscribe_to_events(self.on_event)
 
     def setup_power_monitoring_streams(self, ksqlClient: KSQLDBClient) -> None:
         """
@@ -111,7 +113,7 @@ class ToolMonitoring(OpenFactoryApp):
         while True:
             time.sleep(1)
 
-    def on_event(self, msg_key: str, msg_value: dict) -> None:
+    def on_event(self, msg_subject: str, msg_value: dict):
         """
         Callback for handling new events from the ivac system.
 
@@ -124,7 +126,7 @@ class ToolMonitoring(OpenFactoryApp):
         Writes the event data to a CSV file.
 
         Args:
-            msg_key (str): The key of the Kafka message (the sensor ID).
+            msg_subject (str): The key of the Kafka message (the sensor ID).
             msg_value (dict): The message payload containing sample data.
                               Expected keys: 'id' (str), 'value' (float or str).
         """
@@ -143,7 +145,7 @@ class ToolMonitoring(OpenFactoryApp):
         if (prev_state != msg_value['value'] and msg_value['id'] in self.tool_states.keys()):
             self.verify_tool_states()
 
-        self.write_message_to_csv(msg_key, msg_value)
+        self.write_message_to_csv(msg_subject, msg_value)
 
     def verify_tool_states(self) -> None:
         """
@@ -163,18 +165,18 @@ class ToolMonitoring(OpenFactoryApp):
         print(f"Current tool states: {self.tool_states.values()}")
 
         if any(state == 'UNAVAILABLE' for state in self.tool_states.values()):
-            self.ivac.add_attribute('ivac_tools_status',
-                                    AssetAttribute('At least one tool is UNAVAILABLE',
+            self.ivac.add_attribute(AssetAttribute(id='ivac_tools_status',
+                                                   value='At least one tool is UNAVAILABLE',
                                                    type='Condition',
                                                    tag='WARNING'))
         elif any(state == 'OFF' for state in self.tool_states.values()):
-            self.ivac.add_attribute('ivac_tools_status',
-                                    AssetAttribute('No more than one connected tool is powered ON',
+            self.ivac.add_attribute(AssetAttribute(id='ivac_tools_status',
+                                                   value='No more than one connected tool is powered ON',
                                                    type='Condition',
                                                    tag='NORMAL'))
         else:
-            self.ivac.add_attribute('ivac_tools_status',
-                                    AssetAttribute('More than one connected tool is powered ON.',
+            self.ivac.add_attribute(AssetAttribute(id='ivac_tools_status',
+                                                   value='More than one connected tool is powered ON.',
                                                    type='Condition',
                                                    tag='FAULT'))
 
@@ -206,8 +208,9 @@ class ToolMonitoring(OpenFactoryApp):
 
 
 app = ToolMonitoring(
-    app_uuid='TOOL-MONITORING',
-    ksqlClient=KSQLDBClient("http://ksqldb-server:8088"),
-    bootstrap_servers="broker:29092"
+    app_uuid=os.getenv('APP_UUID', 'TOOL-MONITORING'),
+    ksqlClient=KSQLDBClient(os.getenv('KSQLDB_URL', 'http://ksqldb-server:8088')),
+    bootstrap_servers=os.getenv('KAFKA_BROKER', 'broker:29092')
 )
+
 app.run()
