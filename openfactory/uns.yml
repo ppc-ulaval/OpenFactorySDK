@@ -1,9 +1,0 @@
-# UNS structure of the Virtual Factory
-namespace_structure:
-    - inc: VirtualFactory
-    - workcenter: 
-      - WC1
-    - asset: ANY
-    - attribute: ANY
-
-uns_template: "inc/workcenter/asset/attribute"
