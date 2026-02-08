@@ -18,9 +18,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN if [ "$OPENFACTORY_VERSION" = "latest" ]; then \
-      pip install git+https://github.com/Demo-Smart-Factory-Concordia-University/OpenFactory.git ; \
+      pip install git+https://github.com/openfactoryio/openfactory-core.git ; \
     else \
-      pip install git+https://github.com/Demo-Smart-Factory-Concordia-University/OpenFactory.git@$OPENFACTORY_VERSION ; \
+      pip install git+https://github.com/openfactoryio/openfactory-core.git@$OPENFACTORY_VERSION ; \
     fi
 
 ENV APPLICATION_VERSION=${VERSION}
