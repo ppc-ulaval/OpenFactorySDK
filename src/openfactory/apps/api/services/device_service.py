@@ -10,10 +10,12 @@ class DeviceService:
         """Get all devices from the database."""
         devices = []
         try:
-            query = "SELECT ASSET_UUID FROM assets_type WHERE TYPE LIKE '%Agent';"
-            df = self.ksqlClient.query(query)
-            for asset in df.ASSET_UUID.tolist():
-                devices.append(asset[:-6])  # Remove the '-Agent' suffix
+            query = "SELECT ASSET_UUID FROM assets_type WHERE TYPE LIKE 'Device';"
+            result = self.ksqlClient.query(query)
+            for row in result:
+                asset_uuid = row.get('ASSET_UUID')
+                if asset_uuid:
+                    devices.append(asset_uuid)
             return devices
         except Exception as e:
             print(f"Error getting devices: {e}")
@@ -25,8 +27,8 @@ class DeviceService:
                 f"SELECT ID, VALUE FROM assets WHERE ASSET_UUID = '{device_uuid}' "
                 f"AND TYPE IN ('Events', 'Condition') AND VALUE != 'UNAVAILABLE';"
             )
-            df = self.ksqlClient.query(query)
-            return dict(zip(df.ID.tolist(), df.VALUE.tolist())) if 'ID' in df.columns and 'VALUE' in df.columns else {}
+            result = self.ksqlClient.query(query)
+            return {row['ID']: row['VALUE'] for row in result if 'ID' in row and 'VALUE' in row}
         except Exception as e:
             print(f"Error getting device dataitems for {device_uuid}: {e}")
             return {}

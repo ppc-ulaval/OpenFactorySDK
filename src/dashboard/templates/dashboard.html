@@ -142,6 +142,16 @@
             </div>
         </div>
     </div>
+    {% elif "WTVB01" in device_uuid%}
+    <div class="specrogram-container">
+        <div class="spectrogram-section">
+            <h3 class="chart-title">X-axis Spectrogram</h3>
+            <canvas id="spectrogram" width="800" height="600"></canvas>
+            <div class="frequency-display">
+                Current: <span id="frequency-x">-- Hz</span>
+            </div>
+        </div>
+    </div>
     {% endif %}
 </div>
 </div>

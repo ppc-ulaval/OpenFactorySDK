@@ -1,0 +1,13 @@
+apps:
+  tool_monitoring:
+    uuid: TOOL-MONITORING
+    image: ivac-tool-monitoring-app
+  # moving_average_dusttrak:
+  #   uuid: MOVING-AVERAGE-DUSTTRAK
+  #   image: moving-average-dusttrak-app
+  openfactory_api:
+    uuid: OFA-API
+    image: ofa-api
+  # wtvb01_spectrogram:
+  #   uuid: WTVB01-SPECTROGRAM
+  #   image: wtvb01-spectrogram-app

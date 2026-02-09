@@ -8,8 +8,10 @@
 
       <DataItems>
         <DataItem category="EVENT" id="avail" name="avail" type="AVAILABILITY"/>
+        <DataItem category="EVENT" id="A1ToolPlus" type="EQUIPMENT_MODE" subType="POWERED"/>
         <DataItem category="EVENT" id="A2ToolPlus" type="EQUIPMENT_MODE" subType="POWERED"/>
         <DataItem category="EVENT" id="A3ToolPlus" type="EQUIPMENT_MODE" subType="POWERED"/>
+        <DataItem category="EVENT" id="A1BlastGate" type="DOOR_STATE"/>
         <DataItem category="EVENT" id="A2BlastGate" type="DOOR_STATE"/>
         <DataItem category="EVENT" id="A3BlastGate" type="DOOR_STATE"/>
         <DataItem category="EVENT" id="SimulationMode" type="EXECUTION"/>
