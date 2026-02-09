@@ -39,8 +39,15 @@ class DeviceService:
                 f"SELECT IVAC_POWER_KEY, TOTAL_DURATION_SEC FROM IVAC_POWER_STATE_TOTALS "
                 f"WHERE IVAC_POWER_KEY LIKE '{dataitem_id}%';"
             )
-            df = self.ksqlClient.query(query)
-            return dict(zip(df.IVAC_POWER_KEY.str[11:].tolist(), df.TOTAL_DURATION_SEC.tolist())) if 'IVAC_POWER_KEY' in df.columns and 'TOTAL_DURATION_SEC' in df.columns else {}
+            result = self.ksqlClient.query(query)
+            
+            stats = {}
+            for row in result:
+                if 'IVAC_POWER_KEY' in row and 'TOTAL_DURATION_SEC' in row:
+                    key = row['IVAC_POWER_KEY']
+                    state = key[len(dataitem_id)+1:] if key.startswith(dataitem_id + '_') else key
+                    stats[state] = row['TOTAL_DURATION_SEC']
+            return stats
         except Exception as  e:
             print(f"Error getting dataitems stats:{e}")
             return {}
@@ -52,8 +59,14 @@ class DeviceService:
                 f"SELECT IVAC_POWER_KEY, TOTAL_DURATION_SEC FROM IVAC_POWER_STATE_TOTALS "
                 f"WHERE IVAC_POWER_KEY LIKE '{msg_value['ID']}%';"
             )
-            df = self.ksqlClient.query(query)
-            msg_value['durations'] = dict(zip(df.IVAC_POWER_KEY.str[11:].tolist(), df.TOTAL_DURATION_SEC.tolist())) if 'IVAC_POWER_KEY' in df.columns and 'TOTAL_DURATION_SEC' in df.columns else {}
+            result = self.ksqlClient.query(query)
+            durations = {}
+            for row in result:
+                if 'IVAC_POWER_KEY' in row and 'TOTAL_DURATION_SEC' in row:
+                    key = row['IVAC_POWER_KEY']
+                    state = key[len(msg_value['ID'])+1:] if key.startswith(msg_value['ID'] + '_') else key
+                    durations[state] = row['TOTAL_DURATION_SEC']
+            msg_value['durations'] = durations
         except Exception as e:
             print(f"Error adding duration updates for {msg_value['ID']}: {e}")
 
@@ -64,12 +77,16 @@ class DeviceService:
                 f"SELECT AVERAGE_VALUE, TIMESTAMP FROM {msg_value['ID']}_moving_average "
                 f"WHERE timestamp LIKE '{msg_value['TIMESTAMP'][:-10]}%';"
             )
-            df = self.ksqlClient.query(query)
-            if 'AVERAGE_VALUE' in df.columns and 'TIMESTAMP' in df.columns and not df['AVERAGE_VALUE'].empty and not df['TIMESTAMP'].empty:
-                msg_value['avg_value'] = {
-                    'value': df['AVERAGE_VALUE'].tolist()[0],
-                    'timestamp': df['TIMESTAMP'].tolist()[0]
-                }
+            result = self.ksqlClient.query(query)
+            if result and len(result) > 0:
+                first_row = result[0]
+                if 'AVERAGE_VALUE' in first_row and 'TIMESTAMP' in first_row:
+                    msg_value['avg_value'] = {
+                        'value': first_row['AVERAGE_VALUE'],
+                        'timestamp': first_row['TIMESTAMP']
+                    }
+                else:
+                    msg_value['avg_value'] = {}
             else:
                 msg_value['avg_value'] = {}
         except Exception as e:

@@ -131,6 +131,9 @@ class ToolMonitoring(OpenFactoryApp):
                               Expected keys: 'id' (str), 'value' (float or str).
         """
         prev_state = 'UNAVAILABLE'
+        print(f"Received event: {msg_subject} with value: {msg_value}")
+        if 'id' not in msg_value or 'value' not in msg_value:
+            return
         if (msg_value['id'] == 'A2ToolPlus'):
             prev_state = self.tool_states.get('A2ToolPlus', 'UNAVAILABLE')
             self.tool_states['A2ToolPlus'] = msg_value['value']

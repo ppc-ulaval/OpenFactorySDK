@@ -12,6 +12,7 @@ from services.device_service import DeviceService
 from services.stream_service import StreamService
 from connection.connection_manager import ConnectionManager
 from connection.websockets_manager import WebsocketsManager
+from topic_subscription import TopicSubscriber
 
 class OpenFactoryAPI(OpenFactoryApp):
     """Main application class that orchestrates all components"""
@@ -22,7 +23,9 @@ class OpenFactoryAPI(OpenFactoryApp):
         self.running = True
         self.config = config
 
+
         self.ksqlClient = ksqlClient
+        self.topic_subscriber = TopicSubscriber()
         self.connection_manager = ConnectionManager()
         self.websockets_manager = WebsocketsManager(
             self.connection_manager,
