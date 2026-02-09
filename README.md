@@ -123,6 +123,9 @@ apps:
 ### OpenFactory-API
 Cette application OpenFactory sert de couche de service pour accéder aux données en temps réel à partir des assets déployés sur OpenFactory. 
 
+#### Attacher le container de l'api au réseau 
+Lorsque OpenFactory lance les openfactory apps, elles ne sont pas mises sur le même réseau que OpenFactory. Comme le dashboard se connecte à factory-net, il faut rouler `docker network connect factory-net ofa-api` après avoir lancé les ofa apps pour que le dashboard ait accès à ofa-api.
+
 #### S'abonner à un device
 En se connectant au endpoint `ws://ofa-api:8000/ws/devices/<device_uuid>`, l'app permet à un client WebSocket de recevoir des updates en temps réel pour le device demandé (qui correspond à un asset OpenFactory). L'application s'occupe de créer un stream dérivé dédié à cet asset lors de la connection d'un nouveau client.
 ##### Format d'un message
