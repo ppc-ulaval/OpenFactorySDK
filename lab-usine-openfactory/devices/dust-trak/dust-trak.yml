@@ -1,16 +1,27 @@
 devices:
-  my-device:
+  dust-trak:
     uuid: DUSTTRAK
 
-    uns:
-      workcenter: WC1
-      asset: DUSTTRAK
-
     connector:
-      type: mtconnect
-      agent:
-        port: 5002
-        device_xml: dust_trak.xml
-        adapter:
-          ip: 10.68.14.127
-          port: 7880
+      type: opcua 
+      
+    server:
+      uri: opc.tcp://${CONTAINER_IP}:4841
+
+    variables:
+
+      pm1_concentration:
+        browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm1_concentration
+        tag: DustTrak.pm1_concentration
+
+      pm2_5_concentration:
+        browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm2_5_concentration
+        tag: DustTrak.pm2_5_concentration
+
+      pm4_concentration:
+        browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm4_concentration
+        tag: DustTrak.pm4_concentration
+
+      pm10_concentration:
+        browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm10_concentration
+        tag: DustTrak.pm10_concentration
