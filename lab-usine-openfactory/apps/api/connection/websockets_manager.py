@@ -2,14 +2,14 @@ import asyncio
 import json
 import time
 from queue import Queue
-from models import ClientMessage
+from  import ClientMessage
 from websockets.exceptions import ConnectionClosed
 from websockets.server import WebSocketServerProtocol
 
-from exceptions import DeviceNotFoundException, StreamCreationException
-from connection.connection_manager import ConnectionManager
-from services.device_service import DeviceService
-from services.stream_service import StreamService
+from openfactory.apps.api.exceptions import DeviceNotFoundException, StreamCreationException
+from openfactory.apps.api.connection.connection_manager import ConnectionManager
+from openfactory.apps.api.services.device_service import DeviceService
+from openfactory.apps.api.services.stream_service import StreamService
 
 
 class WebsocketsManager:

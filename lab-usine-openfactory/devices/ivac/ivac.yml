@@ -1,0 +1,18 @@
+devices:
+  ivac:
+    uuid: IVAC
+
+    uns:
+      asset: IVAC
+
+    connector:
+      type: mtconnect
+      agent:
+        port: 5000
+        device_xml: ivac.xml
+        adapter:
+          ip: virtual-ivac-tool-plus-adapter
+          port: 7878
+   
+
+

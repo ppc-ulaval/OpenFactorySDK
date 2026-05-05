@@ -2,7 +2,7 @@ import os
 import time
 from openfactory.apps import OpenFactoryApp
 from openfactory.kafka import KSQLDBClient
-from kafka_processor import KafkaProcessor
+from openfactory.apps.monitoring.wtvb01.kafka_processor import KafkaProcessor
 
 
 

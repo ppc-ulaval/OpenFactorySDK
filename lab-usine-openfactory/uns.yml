@@ -1,0 +1,9 @@
+namespace_structure:
+  - inc: LabUsine
+  - site: PLT
+  - area: ["PLT-0313"]
+  - asset: ANY
+  - attribute: ANY
+
+uns_template: 'inc/site/area/asset/attribute'
+

@@ -2,7 +2,7 @@ import json
 import traceback
 from kafka import KafkaProducer, KafkaConsumer
 from kafka.errors import KafkaError
-from signal_processor import SignalProcessor
+from openfactory.apps.monitoring.wtvb01.signal_processor import SignalProcessor
 
 
 class KafkaProcessor:

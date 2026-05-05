@@ -1,4 +1,4 @@
-from exceptions import StreamCreationException
+from openfactory.apps.api.exceptions import StreamCreationException
 
 class StreamService:
     """Handles Kafka stream operations"""

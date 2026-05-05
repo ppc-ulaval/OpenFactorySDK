@@ -7,12 +7,12 @@ from openfactory.apps import OpenFactoryApp
 from openfactory.assets import Asset
 from openfactory.kafka import KSQLDBClient
 
-from config import Config
-from services.device_service import DeviceService
-from services.stream_service import StreamService
-from connection.connection_manager import ConnectionManager
-from connection.websockets_manager import WebsocketsManager
-from topic_subscription import TopicSubscriber
+from openfactory.apps.api.config import Config
+from openfactory.apps.api.services.device_service import DeviceService
+from openfactory.apps.api.services.stream_service import StreamService
+from openfactory.apps.api.connection.connection_manager import ConnectionManager
+from openfactory.apps.api.connection.websockets_manager import WebsocketsManager
+from openfactory.apps.api.topic_subscription import TopicSubscriber
 
 class OpenFactoryAPI(OpenFactoryApp):
     """Main application class that orchestrates all components"""
