@@ -15,12 +15,12 @@
         "vscode": {
             "settings": {
                 "python.languageServer": "None",
-                "python.defaultInterpreterPath": "/workspaces/openfactory-sdk/lab-usine/.venv/bin/python",
+                "python.defaultInterpreterPath": "/workspaces/openfactory-sdk/lab-usine-openfactory/.venv/bin/python",
                 "ty.enable": true,
                 "ty.disableLanguageServices": false,
-                "ty.serverPath": "/workspaces/openfactory-sdk/lab-usine/.venv/bin/ty",
+                "ty.serverPath": "/workspaces/openfactory-sdk/lab-usine-openfactory/.venv/bin/ty",
                 "ruff.path": [
-                    "/workspaces/openfactory-sdk/lab-usine/.venv/bin/ruff"
+                    "/workspaces/openfactory-sdk/lab-usine-openfactory/.venv/bin/ruff"
                 ],
                 "editor.formatOnSave": true
             },
@@ -30,10 +30,11 @@
             ]
         }
     },
+    "runArgs": ["--add-host=host.docker.internal:host-gateway"],
     "containerEnv": {
         "ENVIRONMENT": "dev",
         "OPENFACTORY_VERSION": "v0.5.3",
         "OPENFACTORY_DOCKER_NETWORK": "factory-net",
-        "OPENFACTORY_UNS_SCHEMA": "/workspaces/openfactory-sdk/lab-usine/uns.yml"
+        "OPENFACTORY_UNS_SCHEMA": "/workspaces/openfactory-sdk/lab-usine-openfactory/uns.yml"
     }
 }

@@ -6,7 +6,7 @@ devices:
       type: opcua 
       
     server:
-      uri: opc.tcp://${CONTAINER_IP}:4842
+      uri: opc.tcp://host.docker.internal:4842
 
     variables:
 
