@@ -1,11 +1,5 @@
-# To build:
-#    docker build -t ofa/vtempsens .
-
 FROM python:3.13-slim
-LABEL author="Rolf Wuthrich" 
-LABEL organisation="Concordia University"
-LABEL description="Docker image for OpenFactory Virtual iVac Tool Plus"
-LABEL documentation="https://github.com/Demo-Smart-Factory-Concordia-University/OpenFactory-SDK"
+LABEL description="Docker image for OpenFactory Virtual iVac"
 
 ARG UNAME=ofa
 ARG UID=1200
@@ -23,12 +17,13 @@ RUN apt-get update
 RUN apt-get -y install git
 
 # python dependencies
-RUN pip install git+https://github.com/Demo-Smart-Factory-Concordia-University/MTCAdapters.git
 RUN pip install asyncua
 
 WORKDIR /home/$UNAME
 USER $UNAME
-
-COPY adapter.py .
+COPY ivac/adapter.py .
+COPY ivac/virtual_ivac.py .
+COPY ivac/ivac_server.py .
+COPY opcua_server.py .
 
 CMD ["python3", "-u", "adapter.py"]

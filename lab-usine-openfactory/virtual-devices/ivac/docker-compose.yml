@@ -1,30 +1,22 @@
-# Docker compose project for Virtual iVac Tool Plus Adapter
-#
-# Deploy the virtual adapter:
-#   docker compose up -d
-#
-# Tear down the virtual adapter
-#   docker compose down
-
 services:
-  virtual-ivac-tool-plus-adapter:
+  virtual-ivac-adapter:
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
-    image: ofa/ivactoolplus
+    image: virtual-ivac
     environment:
       - MIN_TOGGLE_TIME=2.0
       - MAX_TOGGLE_TIME=6.0
-      - ADAPTER_PORT=7878
       - OPCUA_PORT=4840
-      - NAMESPACE_URI=demofactory
-      - DEVICE_BROWSE_NAME=IVAC
-      - SERVER_IP=virtual-ivac-tool-plus-adapter
+      - NAMESPACE_URI=lab-usine-virtuel
+      - DEVICE_BROWSE_NAME=VIRTUAL-IVAC
+      - SERVER_IP=0.0.0.0
+    ports:
+      - "4840:4840"
     networks:
-      - factory-net
+      - openfactory-opcua_default
 
 networks:
-
-  factory-net:
-    name: factory-net
+  openfactory-opcua_default:
+    name: openfactory-opcua_default
     external: true
