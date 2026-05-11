@@ -1,0 +1,4 @@
+apps:
+  tool_monitoring:
+    uuid: TOOL-MONITORING
+    image: ivac-tool-monitoring-app

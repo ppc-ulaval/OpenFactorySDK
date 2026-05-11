@@ -5,7 +5,7 @@ SELECT
     LATEST_BY_OFFSET(value) as current_value,
     LATEST_BY_OFFSET(attributes) as current_attributes
 FROM ASSETS_STREAM
-WHERE asset_uuid = 'IVAC' AND id IN ('A1ToolPlus', 'A2ToolPlus', 'A3ToolPlus')
+WHERE asset_uuid like '%IVAC' AND id IN ('A1ToolPlus', 'A2ToolPlus', 'A3ToolPlus')
 GROUP BY SUBSTRING(id, 1, 2)
 EMIT CHANGES;
 
@@ -15,7 +15,7 @@ SELECT
     LATEST_BY_OFFSET(value) as current_value,
     LATEST_BY_OFFSET(attributes) as current_attributes
 FROM ASSETS_STREAM
-WHERE asset_uuid = 'IVAC' AND id IN ('A1BlastGate', 'A2BlastGate', 'A3BlastGate')
+WHERE asset_uuid like '%IVAC' AND id IN ('A1BlastGate', 'A2BlastGate', 'A3BlastGate')
 GROUP BY SUBSTRING(id, 1, 2)
 EMIT CHANGES;
 
@@ -82,7 +82,7 @@ SELECT
     asset_uuid,
     ROWTIME AS event_time
 FROM ASSETS_STREAM
-WHERE asset_uuid = 'IVAC'
+WHERE asset_uuid like '%IVAC'
   AND id IN ('A1BlastGate', 'A2BlastGate', 'A3BlastGate')
 EMIT CHANGES;
 

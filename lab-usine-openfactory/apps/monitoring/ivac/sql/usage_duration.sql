@@ -6,7 +6,7 @@ SELECT
     value,
     ROWTIME AS ts
 FROM ASSETS_STREAM
-WHERE asset_uuid = 'IVAC' AND id IN ('A1ToolPlus', 'A2ToolPlus', 'A3ToolPlus')
+WHERE asset_uuid like '%IVAC' AND id IN ('A1ToolPlus', 'A2ToolPlus', 'A3ToolPlus')
 EMIT CHANGES;
 
 -- Create a table to keep track of the latest power state for each IVAC asset
