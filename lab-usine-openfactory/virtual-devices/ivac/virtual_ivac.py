@@ -1,9 +1,4 @@
-import os
-
-
 class VirtualIVAC:
-    MIN_TOGGLE_TIME = float(os.environ.get("MIN_TOGGLE_TIME", 5))
-    MAX_TOGGLE_TIME = float(os.environ.get("MAX_TOGGLE_TIME", 10))
     LED_MODES = ["NORMAL", "FAULT", "WARNING"]
 
     def __init__(self):

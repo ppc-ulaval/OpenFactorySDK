@@ -1,11 +1,3 @@
-# Docker compose project for Virtual CNC Adapter
-#
-# Deploy the virtual adapter:
-#   docker compose up -d
-#
-# Tear down the virtual adapter:
-#   docker compose down
-
 services:
   virtual-cnc-adapter:
     build:
@@ -15,16 +7,16 @@ services:
     environment:
       - MIN_TOGGLE_TIME=2.0
       - MAX_TOGGLE_TIME=6.0
-      - ADAPTER_PORT=7878
-      - OPCUA_PORT=4840
-      - NAMESPACE_URI=demofactory
-      - DEVICE_BROWSE_NAME=IVAC
-      - SERVER_IP=virtual-cnc-adapter
+      - OPCUA_PORT=4841
+      - NAMESPACE_URI=lab-usine-virtuel
+      - DEVICE_BROWSE_NAME=CNC
+      - SERVER_IP=0.0.0.0
+    ports:
+      - "4841:4841"
     networks:
-      - factory-net
+      - openfactory-opcua_default
 
 networks:
-
-  factory-net:
-    name: factory-net
+  openfactory-opcua_default:
+    name: openfactory-opcua_default
     external: true
