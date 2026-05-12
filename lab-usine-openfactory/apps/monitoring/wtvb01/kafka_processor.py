@@ -2,15 +2,10 @@ import json
 import traceback
 from kafka import KafkaProducer, KafkaConsumer
 from kafka.errors import KafkaError
-from openfactory.apps.monitoring.wtvb01.signal_processor import SignalProcessor
+from signal_processor import SignalProcessor
 
 
 class KafkaProcessor:
-    """
-    KafkaProcessor class for handling Kafka messages and processing them.
-    This class provides methods to produce and consume messages from Kafka topics.
-    """
-
     def __init__(
         self,
         ksqlClient,
@@ -19,15 +14,6 @@ class KafkaProcessor:
         output_topic,
         plot_dir="spectrogram_plots",
     ):
-        """
-        Initializes the KafkaProducer and KafkaConsumer.
-        Args:
-            bootstrap_servers (str): Comma-separated list of Kafka bootstrap servers.
-            input_topic (str): The topic to consume time series data from.
-            output_topic (str): The topic to produce spectrogram data to.
-            log_file (str): Path to the log file for spectrogram data.
-            plot_dir (str): Directory to save spectrogram plot images.
-        """
         self.ksqlClient = ksqlClient
         self.bootstrap_servers = bootstrap_servers
         self.input_topic = input_topic
@@ -37,7 +23,6 @@ class KafkaProcessor:
         self.signal_processor = SignalProcessor(plot_dir)
 
     def safe_deserialize_value(self, x):
-        """Safe value deserializer with multiple fallback strategies"""
         if x is None:
             return None
 
@@ -50,12 +35,12 @@ class KafkaProcessor:
             except json.JSONDecodeError:
                 try:
                     return json.loads(x.decode("latin-1"))
-                except:
+                except json.JSONDecodeError:
                     return x.decode("utf-8", errors="ignore")
         except json.JSONDecodeError:
             try:
                 return x.decode("utf-8", errors="replace")
-            except:
+            except json.JSONDecodeError:
                 return str(x)
 
     def safe_deserialize_key(self, x):
@@ -70,7 +55,7 @@ class KafkaProcessor:
                 if clean_key
                 else "unknown"
             )
-        except:
+        except json.JSONDecodeError:
             return "unknown"
 
     def _setup_kafka(self):
@@ -132,7 +117,7 @@ class KafkaProcessor:
             print(traceback.format_exception(e))
 
     def run_streaming_processing(self):
-        """Main processing loop with real-time processing"""
+        """Main processing loop"""
         print(
             f"Starting STFT processor - Input: {self.input_topic}, Output: {self.output_topic}"
         )

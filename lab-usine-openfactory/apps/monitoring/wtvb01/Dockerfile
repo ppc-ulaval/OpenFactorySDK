@@ -17,11 +17,12 @@ RUN apt-get update && \
   apt-get install -y git && \
   rm -rf /var/lib/apt/lists/*
 
-RUN if [ "$OPENFACTORY_VERSION" = "latest" ]; then \
-  pip install git+https://github.com/Demo-Smart-Factory-Concordia-University/OpenFactory.git ; \
+RUN if [ "${OPENFACTORY_VERSION}" = "latest" ]; then \
+  pip install git+https://github.com/openfactoryio/openfactory-core.git ; \
   else \
-  pip install git+https://github.com/Demo-Smart-Factory-Concordia-University/OpenFactory.git@$OPENFACTORY_VERSION ; \
+  pip install git+https://github.com/openfactoryio/openfactory-core.git@${OPENFACTORY_VERSION} ; \
   fi
+  
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
 

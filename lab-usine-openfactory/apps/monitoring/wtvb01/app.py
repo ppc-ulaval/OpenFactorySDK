@@ -1,24 +1,21 @@
 import os
 import time
 from openfactory.apps import OpenFactoryApp
+from openfactory.assets import Asset
 from openfactory.kafka import KSQLDBClient
-from openfactory.apps.monitoring.wtvb01.kafka_processor import KafkaProcessor
+from kafka_processor import KafkaProcessor
 
 
 class WTVB01Monitoring(OpenFactoryApp):
     WTVB01_SYSTEM_UUID: str = os.getenv("WTVB01_SYSTEM_UUID", "WTVB01")
 
-    def __init__(self, app_uuid, ksqlClient, bootstrap_servers, loglevel="INFO"):
-        """
-        Initializes the WTVB01Monitoring application.
-        Sets up the application with the provided UUID, KSQLDB client, and Kafka bootstrap servers.
-        Args:
-            app_uuid (str): Unique identifier for the application.
-            ksqlClient: KSQLDB client instance for interacting with KSQLDB.
-            bootstrap_servers (str): Comma-separated list of Kafka bootstrap servers.
-            loglevel (str): Logging level for the application. Defaults to 'INFO'.
-        """
-        super().__init__(app_uuid, ksqlClient, bootstrap_servers, loglevel)
+    def __init__(self, ksqlClient, bootstrap_servers, loglevel="INFO"):
+        super().__init__(
+            ksqlClient=ksqlClient,
+            bootstrap_servers=bootstrap_servers,
+            loglevel=loglevel,
+        )
+
         self.kafka_processor_frequencyX = KafkaProcessor(
             ksqlClient,
             bootstrap_servers,
@@ -26,14 +23,10 @@ class WTVB01Monitoring(OpenFactoryApp):
             output_topic="spectrogram_stream_dx",
             plot_dir="spectrogram_plotx",
         )
-        self.tool_states = {}
-        object.__setattr__(self, "ASSET_ID", "WTVB01")
+
         self.setup_streams(ksqlClient)
 
     def setup_streams(self, ksqlClient: KSQLDBClient) -> None:
-        """
-        Setup KSQL streams and tables to convert frequencies to spectrogram data.
-        """
         try:
             queries = []
             with open("sql/spectrogram_cleanup.sql", "r") as sql_file:
@@ -58,9 +51,6 @@ class WTVB01Monitoring(OpenFactoryApp):
             print(f"KSQL setup error: {e}")
 
     def app_event_loop_stopped(self) -> None:
-        """
-        Called automatically when the main application event loop is stopped.
-        """
         print("Stopping iVAC consumer thread ...")
 
     def main_loop(self) -> None:
@@ -71,8 +61,7 @@ class WTVB01Monitoring(OpenFactoryApp):
 
 
 app = WTVB01Monitoring(
-    app_uuid="WTVB01-SPECTROGRAM",
-    ksqlClient=KSQLDBClient("http://ksqldb-server:8088"),
-    bootstrap_servers="broker:29092",
+    ksqlClient=KSQLDBClient(os.getenv("KSQLDB_URL", "http://ksqldb-server:8088")),
+    bootstrap_servers=os.getenv("KAFKA_BROKER", "broker:29092"),
 )
 app.run()
