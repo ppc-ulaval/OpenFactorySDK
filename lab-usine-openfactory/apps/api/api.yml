@@ -1,0 +1,4 @@
+apps:
+  openfactory_api:
+    uuid: OFA-API
+    image: ofa-api

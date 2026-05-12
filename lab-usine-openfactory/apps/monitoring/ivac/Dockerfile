@@ -28,7 +28,7 @@ ENV APPLICATION_MANUFACTURER=${APPLICATION_MANUFACTURER}
 
 WORKDIR /ofa
 RUN mkdir -p sql
-COPY tool_monitoring.py /ofa
+COPY app.py /ofa
 COPY power_monitoring_streams.py /ofa
 COPY tool_states_rules.py /ofa
 COPY sql/usage_duration.sql /ofa/sql
@@ -37,4 +37,4 @@ COPY sql/cleanup.sql /ofa/sql
 RUN chown -R appuser:appuser /ofa
 
 USER ${UNAME}
-CMD ["python3", "-u", "/ofa/tool_monitoring.py"]
+CMD ["python3", "-u", "/ofa/app.py"]

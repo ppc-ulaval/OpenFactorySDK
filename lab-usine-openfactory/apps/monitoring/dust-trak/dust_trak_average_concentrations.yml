@@ -1,0 +1,4 @@
+apps:
+  moving_average_dusttrak:
+    uuid: MOVING-AVERAGE-DUSTTRAK
+    image: moving-average-dusttrak-app
