@@ -1,11 +1,6 @@
-class APIException(Exception):
-    """Base exception for API errors"""
+class DeviceNotFoundException(Exception):
     pass
 
-class DeviceNotFoundException(APIException):
-    """Raised when a device is not found"""
-    pass
 
-class StreamCreationException(APIException):
-    """Raised when stream creation fails"""
+class StreamCreationException(Exception):
     pass

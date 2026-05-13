@@ -1,16 +1,15 @@
-from openfactory.apps.api.exceptions import StreamCreationException
+from exceptions import StreamCreationException
+from openfactory.kafka import KSQLDBClient
+
 
 class StreamService:
-    """Handles Kafka stream operations"""
-    
-    def __init__(self, ksqlClient):
-        self.ksqlClient = ksqlClient
-    
+    def __init__(self, ksql_client: KSQLDBClient):
+        self._ksql_client = ksql_client
+
     def create_device_stream(self, device_uuid: str) -> str:
-        """Create a Kafka stream for device monitoring"""
-        topic_name = f'{device_uuid}_monitoring'
+        topic_name = f"{device_uuid}_monitoring"
         try:
-            query = (
+            self._ksql_client.statement_query(
                 f"CREATE STREAM IF NOT EXISTS device_stream_{device_uuid} "
                 f"WITH (KAFKA_TOPIC='{topic_name}', PARTITIONS=1) AS "
                 f"SELECT ASSET_UUID AS KEY, ID, VALUE, "
@@ -19,18 +18,19 @@ class StreamService:
                 f"AND TYPE IN ('Events', 'Condition', 'Samples') AND VALUE != 'UNAVAILABLE' "
                 f"EMIT CHANGES;"
             )
-            self.ksqlClient.statement_query(query)
             return topic_name
         except Exception as e:
-            print(f"Failed to create stream for {device_uuid}: {e}")
-            raise StreamCreationException(f"Failed to create stream for device {device_uuid}: {e}")
-    
-    def drop_device_stream(self, device_uuid: str) -> None:
-        """Drop a device stream"""
+            raise StreamCreationException(
+                f"Failed to create stream for device {device_uuid}: {e}"
+            )
+
+    def drop_device_stream(self, device_uuid: str):
         try:
-            query = f"DROP STREAM IF EXISTS device_stream_{device_uuid};"
-            self.ksqlClient.statement_query(query)
+            self._ksql_client.statement_query(
+                f"DROP STREAM IF EXISTS device_stream_{device_uuid};"
+            )
             print(f"Dropped stream for device {device_uuid}")
         except Exception as e:
-            print(f"Failed to drop stream for {device_uuid}: {e}")
-            raise StreamCreationException(f"Failed to drop stream for device {device_uuid}: {e}")
+            raise StreamCreationException(
+                f"Failed to drop stream for device {device_uuid}: {e}"
+            )
