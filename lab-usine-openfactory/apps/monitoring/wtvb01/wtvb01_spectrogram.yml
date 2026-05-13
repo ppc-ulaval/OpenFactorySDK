@@ -1,0 +1,4 @@
+apps:
+  wtvb01_spectrogram:
+      uuid: WTVB01-SPECTROGRAM
+      image: wtvb01-spectrogram

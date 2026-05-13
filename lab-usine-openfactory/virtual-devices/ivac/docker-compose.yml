@@ -1,0 +1,22 @@
+services:
+  virtual-ivac-adapter:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: virtual-ivac
+    environment:
+      - MIN_TOGGLE_TIME=2.0
+      - MAX_TOGGLE_TIME=6.0
+      - OPCUA_PORT=4840
+      - NAMESPACE_URI=lab-usine-virtuel
+      - DEVICE_BROWSE_NAME=VIRTUAL-IVAC
+      - SERVER_IP=0.0.0.0
+    ports:
+      - "4840:4840"
+    networks:
+      - openfactory-opcua_default
+
+networks:
+  openfactory-opcua_default:
+    name: openfactory-opcua_default
+    external: true

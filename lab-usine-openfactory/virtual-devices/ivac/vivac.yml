@@ -1,0 +1,36 @@
+devices:
+  virtual-ivac:
+    uuid: VIRTUAL-IVAC
+
+    connector:
+      type: opcua
+
+      server:
+        uri: opc.tcp://virtual-ivac-adapter:4840
+
+      variables:
+        A1ToolPlus:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:A1ToolPlus
+          tag: VIRTUAL-IVAC.A1ToolPlus
+        A2ToolPlus:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:A2ToolPlus
+          tag: VIRTUAL-IVAC.A2ToolPlus
+        A3ToolPlus:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:A3ToolPlus
+          tag: VIRTUAL-IVAC.A3ToolPlus
+        A1BlastGate:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:A1BlastGate
+          tag: VIRTUAL-IVAC.A1BlastGate
+        A2BlastGate:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:A2BlastGate
+          tag: VIRTUAL-IVAC.A2BlastGate
+        A3BlastGate:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:A3BlastGate
+          tag: VIRTUAL-IVAC.A3BlastGate
+
+      methods:
+        BuzzerControl:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:BuzzerControl
+
+        SimulationMode:
+          browse_path: 0:Root/0:Objects/2:VIRTUAL-IVAC/2:SimulationMode

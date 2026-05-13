@@ -51,10 +51,6 @@ devices:
   my-device:
     uuid: <UUID_DU_APPAREIL>
 
-    uns:
-      workcenter: <NOM_WORKCENTER>
-      asset: <NOM_ASSET>
-
     connector:
       type: mtconnect
       agent:
@@ -63,23 +59,47 @@ devices:
         adapter:
           ip: <IP_ADAPTATEUR>
           port: <PORT_MTCONNECT>
-
-      supervisor:
-        image: ghcr.io/openfactoryio/opcua-supervisor:${OPENFACTORY_VERSION}
-        adapter:
-          ip: <IP_ADAPTATEUR>
-          port: <PORT_OPCUA>
-          environment:
-            - NAMESPACE_URI=<NAMESPACE_OPCUA>
-            - BROWSE_NAME=<NOM_BROWSE_OPCUA>
-            - KSQLDB_URL=http://ksqldb-server:8088
 ```
-L'agent est celui qui achemine l'information de l'équipement à OpenFactory. Le supervisor sert à envoyer des commandes à l'équipement par protocole OPC-UA et n'est pas toujours nécessaire (comme dans le cas de la CNC).
+
+Exemple avec le dust-trak pour le protocole opc-ua:
+```
+devices:
+  dust-trak:
+    uuid: DUSTTRAK
+
+    connector:
+      type: opcua 
+      
+      server:
+        uri: opc.tcp://${CONTAINER_IP}:4841
+
+      variables:
+
+        pm1_concentration:
+          browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm1_concentration
+          tag: DustTrak.pm1_concentration
+
+        pm2_5_concentration:
+          browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm2_5_concentration
+          tag: DustTrak.pm2_5_concentration
+
+        pm4_concentration:
+          browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm4_concentration
+          tag: DustTrak.pm4_concentration
+
+        pm10_concentration:
+          browse_path: 0:Root/0:Objects/2:DUSTTRAK/2:pm10_concentration
+          tag: DustTrak.pm10_concentration
+```
+Le protocole MTConnect est read-only, donc il ne permet pas de retourner des commandes à partir de OpenFactory. Le protocole OPC-UA permet de lire les données et d'envoyer des commandes aux assets/devices.
 
 #### Exemples de fichiers .yml
-- [Fichier .yml pour le iVAC](/openfactory/devices/ivac.yml)
-- [Fichier .yml pour la CNC](/openfactory/devices/cnc.yml)
+- [Fichier .yml pour le iVAC](/openfactory/devices/ivac/ivac.yml)
+- [Fichier .yml pour le détecteur de particules DustTrak](/openfactory/devices/dust-trak/dust-trak.yml)
 
+#### Avant de lancer le device
+Il faut s'assurer de lancer le connecteur adéquat avant de lancer le device pour que les données s'acheminent correctement. 
+`$opcua-connector-up`
 
 ### Lancer l’agent d'un appareil
 `$ofa device up <CHEMIN_VERS_FICHIER_YML>`

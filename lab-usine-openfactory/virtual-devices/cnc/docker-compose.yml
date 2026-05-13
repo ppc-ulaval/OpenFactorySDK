@@ -1,0 +1,22 @@
+services:
+  virtual-cnc-adapter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ofa/cnc
+    environment:
+      - MIN_TOGGLE_TIME=2.0
+      - MAX_TOGGLE_TIME=6.0
+      - OPCUA_PORT=4841
+      - NAMESPACE_URI=lab-usine-virtuel
+      - DEVICE_BROWSE_NAME=CNC
+      - SERVER_IP=0.0.0.0
+    ports:
+      - "4841:4841"
+    networks:
+      - openfactory-opcua_default
+
+networks:
+  openfactory-opcua_default:
+    name: openfactory-opcua_default
+    external: true

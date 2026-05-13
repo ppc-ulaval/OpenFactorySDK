@@ -1,0 +1,24 @@
+{
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "version": "2.5.7",
+      "resolved": "ghcr.io/devcontainers/features/common-utils@sha256:dbf431d6b42d55cde50fa1df75c7f7c3999a90cde6d73f7a7071174b3c3d0cc4",
+      "integrity": "sha256:dbf431d6b42d55cde50fa1df75c7f7c3999a90cde6d73f7a7071174b3c3d0cc4"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "2.16.1",
+      "resolved": "ghcr.io/devcontainers/features/docker-in-docker@sha256:ce078b7bf7d9ef3bcb9813b32103795d8d72172446890b64772cbe1dec6baafd",
+      "integrity": "sha256:ce078b7bf7d9ef3bcb9813b32103795d8d72172446890b64772cbe1dec6baafd"
+    },
+    "ghcr.io/openfactoryio/openfactory-sdk/infra:0.5.3": {
+      "version": "0.5.3",
+      "resolved": "ghcr.io/openfactoryio/openfactory-sdk/infra@sha256:98c654510b84eea6276bf9ad1cf8bad67fafc51011982261b998360cddf7c55a",
+      "integrity": "sha256:98c654510b84eea6276bf9ad1cf8bad67fafc51011982261b998360cddf7c55a"
+    },
+    "ghcr.io/openfactoryio/openfactory-sdk/opcua-connector:0.5.3": {
+      "version": "0.5.3",
+      "resolved": "ghcr.io/openfactoryio/openfactory-sdk/opcua-connector@sha256:f117d73d17913e0620cf9524d919eeac48e030edb7684ae80a30b7791d1abe44",
+      "integrity": "sha256:f117d73d17913e0620cf9524d919eeac48e030edb7684ae80a30b7791d1abe44"
+    }
+  }
+}

@@ -1,11 +1,9 @@
 [project]
 name = "openfactory-sdk"
-version = "0.4.1"
+version = "0.5.4rc4"
 description = "A developer SDK for simulating and deploying apps on a local OpenFactory setup."
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dependencies = [
-    "click>=8.1.0",
-    "rich"
 ]
 
 [project.optional-dependencies]
@@ -14,9 +12,6 @@ dev = [
     "tomlkit",
     "OpenFactory @ git+https://github.com/openfactoryio/openfactory-core.git@main",
 ]
-
-[project.scripts]
-openfactory-sdk = "openfactory_sdk.cli:ofa_sdk_cli"
 
 [build-system]
 requires = ["setuptools>=61.0"]
