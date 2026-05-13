@@ -17,6 +17,7 @@ templates = Jinja2Templates(directory="templates")
 
 ws_client = WebSocketClient(API_BASE_URL)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage application lifecycle"""
@@ -25,13 +26,15 @@ async def lifespan(app: FastAPI):
     print("Shutting down...")
     await ws_client.cleanup()
 
+
 app = FastAPI(
-    title="Dashboard", 
+    title="Dashboard",
     description="Real-time monitoring of lab-usine equipments",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 async def create_sse_stream() -> AsyncGenerator[str, None]:
     """
@@ -39,39 +42,36 @@ async def create_sse_stream() -> AsyncGenerator[str, None]:
     """
     last_ping = asyncio.get_event_loop().time()
     ping_interval = 30
-    
+
     while True:
         try:
             try:
                 message = await asyncio.wait_for(
-                    ws_client.message_queue.get(), 
-                    timeout=1.0
+                    ws_client.message_queue.get(), timeout=1.0
                 )
                 yield f"data: {json.dumps(message)}\n\n"
-                
+
             except asyncio.TimeoutError:
                 current_time = asyncio.get_event_loop().time()
                 if current_time - last_ping > ping_interval:
                     yield f"data: {json.dumps({'event': 'ping'})}\n\n"
                     last_ping = current_time
-            
+
         except Exception as e:
             print(f"Error in SSE stream: {e}")
-            error_msg = {'event': 'error', 'message': str(e)}
+            error_msg = {"event": "error", "message": str(e)}
             yield f"data: {json.dumps(error_msg)}\n\n"
             await asyncio.sleep(1)
+
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard_home(request: Request):
     """Main dashboard page"""
     return templates.TemplateResponse(
         "index.html",
-        {
-            "request": request,
-            "devices": list(ws_client.devices.keys()),
-            "device": {}
-        }
+        {"request": request, "devices": list(ws_client.devices.keys()), "device": {}},
     )
+
 
 @app.get("/devices/{device_uuid}", response_class=HTMLResponse)
 async def device_detail(request: Request, device_uuid: str):
@@ -79,7 +79,7 @@ async def device_detail(request: Request, device_uuid: str):
     device = ws_client.devices.get(device_uuid)
     if not device:
         raise HTTPException(status_code=404, detail="Device not found")
-    
+
     return templates.TemplateResponse(
         "index.html",
         {
@@ -88,8 +88,9 @@ async def device_detail(request: Request, device_uuid: str):
             "device_uuid": device_uuid,
             "device_dataitems": device["dataitems"],
             "dataitems_stats": device["stats"],
-        }
+        },
     )
+
 
 @app.get("/updates/all")
 async def stream_updates():
@@ -100,8 +101,9 @@ async def stream_updates():
         headers={
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-        }
+        },
     )
+
 
 @app.post("/simulation-mode/{device_uuid}")
 async def set_simulation_mode(device_uuid: str, request: Request):
@@ -109,21 +111,23 @@ async def set_simulation_mode(device_uuid: str, request: Request):
     try:
         data = await request.json()
         enabled = data.get("enabled", False)
-        
+
         if device_uuid not in ws_client.devices:
             raise HTTPException(status_code=404, detail="Device not found")
-        
+
         response = await ws_client.send_simulation_mode(device_uuid, enabled)
         return response
-        
+
     except Exception as e:
         print(f"Failed to set simulation mode: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/api/devices")
 async def get_all_devices():
     """Get all devices"""
     return {"devices": ws_client.devices}
+
 
 @app.get("/api/devices/{device_uuid}")
 async def get_device(device_uuid: str):
@@ -132,6 +136,7 @@ async def get_device(device_uuid: str):
     if not device:
         raise HTTPException(status_code=404, detail="Device not found")
     return {"device": device}
+
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=3000, reload=True)

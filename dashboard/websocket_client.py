@@ -72,7 +72,7 @@ class WebSocketClient:
                             "stats": device.get("durations", {}),
                         }
                 
-        except Exception as e:
+        except websockets.WebSocketException as e:
             print(f"Failed to fetch initial devices: {e}")
             
     async def _start_device_monitoring(self):
