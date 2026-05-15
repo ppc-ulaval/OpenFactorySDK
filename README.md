@@ -2,12 +2,17 @@
 Guide pour l’installation, la configuration et l’utilisation du SDK OpenFactory pour simuler ou connecter des appareils industriels via MTConnect et déployer des applications.
 
 ## Prérequis
+### Linux 
 Avant de commencer, il faut s'assurer d’avoir les éléments suivants installés :
 - Docker Desktop
-- WSL v2 (pour Windows)
+
+### Windows
+Avant de commencer, il faut s'assurer d’avoir les éléments suivants installés :
+- Docker Desktop
+- WSL v2
 - Ubuntu activé dans Docker
-→ Paramètres → Ressources → Intégration WSL → Activer Ubuntu (pour Windows)
-- Le repo clôné dans le disque dur virtuel Linux (pour Windows)
+→ Paramètres → Ressources → Intégration WSL → Activer Ubuntu
+- Le repo clôné dans le disque dur virtuel Linux
 
 ## Configuration de l’environnement
 ### Étape 1 : Modifier devcontainer.json
