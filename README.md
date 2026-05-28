@@ -1,3 +1,6 @@
+# Ce repo est outdated !
+Pour la version la plus à jour, voir https://github.com/OpenFactoryLabUsine.
+
 # Guide Utilisateur – OpenFactory SDK
 Guide pour l’installation, la configuration et l’utilisation du SDK OpenFactory pour simuler ou connecter des appareils industriels via MTConnect et déployer des applications.
 
